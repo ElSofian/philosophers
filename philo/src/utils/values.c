@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:50:35 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 11:54:24 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:12:14 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	set_bool(pthread_mutex_t *mtx, bool *dest, bool value)
 	mutex(mtx, UNLOCK);
 }
 
-bool		get_bool(pthread_mutex_t *mtx, bool *value)
+bool	get_bool(pthread_mutex_t *mtx, bool *value)
 {
 	bool	res;
 

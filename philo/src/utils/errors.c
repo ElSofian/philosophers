@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soelalou <soelalou@42.student.fr>          +#+  +:+       +#+        */
+/*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:51:09 by soelalou          #+#    #+#             */
-/*   Updated: 2023/12/27 14:36:49 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:12:54 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error(char *str, t_table *table)
 {
-	ft_printf("Error: %s\n", str);
+	printf("Error: %s\n", str);
 	if (table)
 		free_all(table);
 	exit(EXIT_FAILURE);

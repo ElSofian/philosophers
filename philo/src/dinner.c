@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:39:12 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 13:59:00 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:10:55 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,18 @@ static void	sleeping(t_philo *philo)
 	wait(philo->table, philo->table->time_to_sleep);
 }
 
+void	wait_all_threads(t_table *table)
+{
+	while (!get_bool(&table->mutex, &table->can_start))
+		;
+}
+
 void	*dinner(void *data)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	while (!get_bool(&philo->table->mutex, &philo->table->can_start))
-		;
+	wait_all_threads(philo->table);
 	while (!is_finished(philo->table))
 	{
 		if (philo->max_eated)
@@ -68,11 +73,8 @@ void	start(t_table *table)
 		thread(&table->philo[i].thread, dinner, &table->philo[i], CREATE);
 	table->start_time = get_time(MILLISECONDS);
 	set_bool(&table->mutex, &table->can_start, true);
-	i = 0;
-	while (i < table->philos_count)
-	{
-		thread(&table->philo->thread, NULL, NULL, JOIN);
-		i++;
-	}
-	set_bool(&table->mutex, &table->finished, true);
+	i = -1;
+	while (++i < table->philos_count)
+		thread(&table->philo[i].thread, NULL, NULL, JOIN);
+	// set_bool(&table->mutex, &table->finished, true);
 }
