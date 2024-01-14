@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 14:30:11 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 14:01:11 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/14 15:01:45 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	initialize_table(t_table *table, int ac, char **av)
 		table->eat_count = -1;
 	table->fork = (t_fork *)malloc(sizeof(t_fork) * table->philos_count);
 	table->philo = (t_philo *)malloc(sizeof(t_philo) * table->philos_count);
+	table->threads = 0;
 	table->finished = false;
 	table->can_start = false;
 	mutex(&table->mutex, INIT);
@@ -41,7 +42,7 @@ static void	initialize_forks(t_table *table)
 	while (i < table->philos_count)
 	{
 		fork = table->fork + i;
-		fork->id = i + 1;
+		fork->id = i;
 		fork->using = false;
 		mutex(&fork->mutex, INIT);
 		fork->table = table;
@@ -87,7 +88,7 @@ static void	initialize_philos(t_table *table)
 		put_fork(table, philo, i);
 		philo->table = table;
 		mutex(&philo->mutex, INIT);
-		logs(philo, "created");
+		printf("Philo #%ld created\n", philo->id);
 		i++;
 	}
 }

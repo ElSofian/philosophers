@@ -6,26 +6,42 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:39:12 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 14:10:55 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/14 15:03:52 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	dinner_alone(void)
+static void	can_dinner_start(t_table *table)
 {
-	return ;
+	while (!get_bool(&table->mutex, &table->can_start))
+		;
+}
+
+static void	*dinner_alone(void *data)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)data;
+	can_dinner_start(philo->table);
+	set_long(&philo->mutex, &philo->last_eat, get_time(MILLISECONDS));
+	set_long(&philo->table->mutex, &philo->table->threads,
+		get_long(&philo->table->mutex, &philo->table->threads) + 1);
+	set_status(philo, TAKE_RIGHT_FORK, VISUALIZER);
+	while (!is_finished(philo->table))
+		usleep(200);
+	return (NULL);
 }
 
 static void eat(t_philo *philo)
 {
 	mutex(&philo->right_fork->mutex, LOCK);
-	set_status(philo, TAKE_RIGHT_FORK);
+	set_status(philo, TAKE_RIGHT_FORK, VISUALIZER);
 	mutex(&philo->left_fork->mutex, LOCK);
-	set_status(philo, TAKE_LEFT_FORK);
+	set_status(philo, TAKE_LEFT_FORK, VISUALIZER);
 	set_long(&philo->mutex, &philo->last_eat, get_time(MILLISECONDS));
 	philo->eated_count++;
-	set_status(philo, EATING);
+	set_status(philo, EATING, VISUALIZER);
 	wait(philo->table, philo->table->time_to_eat);
 	if (philo->table->eat_count == philo->eated_count)
 		set_bool(&philo->mutex, &philo->max_eated, true);
@@ -35,14 +51,8 @@ static void eat(t_philo *philo)
 
 static void	sleeping(t_philo *philo)
 {
-	set_status(philo, SLEEPING);
+	set_status(philo, SLEEPING, VISUALIZER);
 	wait(philo->table, philo->table->time_to_sleep);
-}
-
-void	wait_all_threads(t_table *table)
-{
-	while (!get_bool(&table->mutex, &table->can_start))
-		;
 }
 
 void	*dinner(void *data)
@@ -50,14 +60,17 @@ void	*dinner(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	wait_all_threads(philo->table);
+	can_dinner_start(philo->table);
+	set_long(&philo->mutex, &philo->last_eat, get_time(MILLISECONDS));
+	set_long(&philo->table->mutex, &philo->table->threads,
+		get_long(&philo->table->mutex, &philo->table->threads) + 1);
 	while (!is_finished(philo->table))
 	{
-		if (philo->max_eated)
+		if (get_bool(&philo->mutex, &philo->max_eated))
 			break ;
 		eat(philo);
 		sleeping(philo);
-		set_status(philo, THINKING);
+		set_status(philo, THINKING, VISUALIZER);
 	}
 	return (NULL);
 }
@@ -66,15 +79,16 @@ void	start(t_table *table)
 {
 	int	i;
 
-	// if (table->philos_count == 1)
-	// 	thread(&table->philo->thread, dinner_alone, &table->philo[0], CREATE);
+	if (table->philos_count == 1)
+		thread(&table->philo[0].thread, dinner_alone, &table->philo[0], CREATE);
 	i = -1;
 	while (++i < table->philos_count)
 		thread(&table->philo[i].thread, dinner, &table->philo[i], CREATE);
+	thread(&table->searcher, search, table, CREATE);
 	table->start_time = get_time(MILLISECONDS);
 	set_bool(&table->mutex, &table->can_start, true);
 	i = -1;
 	while (++i < table->philos_count)
 		thread(&table->philo[i].thread, NULL, NULL, JOIN);
-	// set_bool(&table->mutex, &table->finished, true);
+	set_bool(&table->mutex, &table->finished, true);
 }
