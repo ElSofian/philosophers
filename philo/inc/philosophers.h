@@ -23,7 +23,7 @@
 # include "../libft/libft.h"
 
 # ifndef VISUALIZER
-#  define VISUALIZER false
+#  define VISUALIZER true
 # endif
 
 # define END	"\033[0m"
@@ -65,7 +65,6 @@ typedef struct s_fork
 	bool			using;
 	pthread_mutex_t	mutex;
 	struct s_table	*table;
-	struct s_fork	*next;
 }		t_fork;
 
 typedef struct s_philo
@@ -82,7 +81,6 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	mutex;
 	struct s_table	*table;
-	struct s_philo	*next;
 }		t_philo;
 
 typedef struct s_table
@@ -100,7 +98,7 @@ typedef struct s_table
 	t_philo			*philo;
 	pthread_t		searcher;
 	pthread_mutex_t	mutex;
-	pthread_mutex_t	slate;
+	pthread_mutex_t	status;
 }			t_table;
 
 // Dinner
@@ -109,19 +107,23 @@ void	free_all(t_table *table);
 void	check(int ac, char **av);
 void	initialize(t_table *table, int ac, char **av);
 void	mutex(pthread_mutex_t *mutex, t_mutex_code code);
-void	thread(pthread_t *thread, void *(*f)(void *), void *data, t_thread_code code);
+void	thread(pthread_t *thread, void *(*f)(void *),
+			void *data, t_thread_code code);
 void	*dinner(void *data);
 void	start(t_table *table);
 
 // Utils
 void	*search(void *data);
+void	think(t_philo *philo, bool start);
+void	unsync(t_philo *philo);
 void	set_bool(pthread_mutex_t *mtx, bool *dest, bool value);
 void	wait(t_table *table, long sec);
 void	set_long(pthread_mutex_t *mtx, long *dest, long value);
 void	set_status(t_philo *philo, t_philo_state status, bool visualizer);
+void	increase_long(pthread_mutex_t *mtx, long *value);
 bool	get_bool(pthread_mutex_t *mtx, bool *value);
 bool	is_finished(t_table *table);
 long	get_long(pthread_mutex_t *mtx, long *value);
-long	get_time(t_time_code code);
+long	get_time(int code);
 
 #endif

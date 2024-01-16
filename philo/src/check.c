@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:52:05 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 11:01:55 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 14:01:43 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,9 @@ static void	check_args(int ac, char **av)
 time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n");
 		exit(EXIT_FAILURE);
 	}
-	if (ft_atol(av[1]) > 32768)
+	if (ft_atol(av[1]) > 200)
 	{
-		ft_printf("Too many philosophers. \
-The number max of threads is 32768.\n");
+		ft_printf("Too many philosophers.\n");
 		exit(EXIT_FAILURE);
 	}
 }

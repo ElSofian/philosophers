@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:18:12 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 10:31:16 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:45:06 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static void	check_error(int status, t_mutex_code code)
 {
+	if (status == 0)
+		return ;
 	if (status == EINVAL && (code == LOCK || code == UNLOCK))
 		error("Invalid mutex provided.", NULL);
 	else if (status == EINVAL && code == INIT)

@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:11:29 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/14 15:03:27 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 14:00:02 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	can_start_search(t_table *table, pthread_mutex_t *mtx)
 {
-	int	res;
+	bool	res;
 
 	res = false;
 	mutex(mtx, LOCK);
@@ -35,30 +35,34 @@ static bool	philo_is_dead(t_philo *philo)
 	last_eat = get_long(&philo->mutex, &philo->last_eat);
 	time = get_time(MILLISECONDS);
 	time_without_eating = time - last_eat;
-	if (time_without_eating > (philo->table->time_to_die / 1000))
+	if (time_without_eating > (philo->table->time_to_die / 1e3))
+	{
+		printf("[%ld] %ld died, last eat: %ld, time_without_eating: %ld\n",
+			time - philo->table->start_time, philo->id,
+			time_without_eating, (philo->table->time_to_die / 1000));
 		return (true);
+	}
 	return (false);
 }
 
 void	*search(void *data)
 {
 	int		i;
-	t_table *tmp;
+	t_table *table;
 	
-	tmp = (t_table *)data;
-	while (!can_start_search(tmp, &tmp->mutex))
+	table = (t_table *)data;
+	while (!can_start_search(table, &table->mutex))
 		;
-	while (!is_finished(tmp))
+	while (!is_finished(table))
 	{
 		i = 0;
-		while (i < tmp->philos_count)
+		while (i < table->philos_count && !is_finished(table))
 		{
-			if (philo_is_dead(tmp->philo + i) && !is_finished(tmp))
+			if (philo_is_dead(table->philo + i))
 			{
-				set_bool(&tmp->mutex, &tmp->finished, true);
-				set_status(tmp->philo + i, DEAD, VISUALIZER);
-				return (NULL);
-			}
+				set_bool(&table->mutex, &table->finished, true);
+				set_status(table->philo + i, DEAD, VISUALIZER);
+			} 
 			i++;
 		}
 	}

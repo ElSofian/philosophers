@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:28:52 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 10:36:42 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/15 10:45:15 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static void	check_error(int status, t_thread_code code)
 {
+	if (status == 0)
+		return ;
 	if (status == EINVAL && code == CREATE)
 		error("Invalid thread provided.", NULL);
 	else if (status == EINVAL && (code == JOIN || code == DETACH))

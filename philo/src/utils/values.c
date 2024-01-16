@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:50:35 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 14:12:14 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 12:38:56 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ bool	get_bool(pthread_mutex_t *mtx, bool *value)
 	res = *value;
 	mutex(mtx, UNLOCK);
 	return (res);
+}
+
+void	increase_long(pthread_mutex_t *mtx, long *value)
+{	
+	mutex(mtx, LOCK);
+	(*value)++;
+	mutex(mtx, UNLOCK);
 }
 
 void	set_long(pthread_mutex_t *mtx, long *dest, long value)

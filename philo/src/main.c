@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 09:27:21 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/09 14:03:31 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 13:19:22 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,13 @@
 
 int	main(int ac, char **av)
 {
-	t_table	*table;
+	t_table	table;
 
 	check(ac, av);
-	table = NULL;
-	table = (t_table *)malloc(sizeof(t_table));
-	if (!table)
-		error("An error occured while allocating table.", NULL);
-	initialize(table, ac, av);
-	if (table->eat_count == 0)
+	initialize(&table, ac, av);
+	if (table.eat_count == 0)
 		return (0);
-	start(table);
-	// free_all(table);
+	start(&table);
+	free_all(&table);
 	return (0);
 }

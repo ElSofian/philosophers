@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 14:30:11 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/14 15:01:45 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 14:00:44 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static void	initialize_table(t_table *table, int ac, char **av)
 {
 	table->philos_count = ft_atol(av[1]);
-	table->time_to_die = ft_atol(av[2]) * 1000;
-	table->time_to_eat = ft_atol(av[3]) * 1000;
-	table->time_to_sleep = ft_atol(av[4]) * 1000;
+	table->time_to_die = ft_atol(av[2]) * 1e3;
+	table->time_to_eat = ft_atol(av[3]) * 1e3;
+	table->time_to_sleep = ft_atol(av[4]) * 1e3;
 	table->can_start = false;
 	if (ac == 6)
 		table->eat_count = ft_atol(av[5]);
@@ -29,7 +29,7 @@ static void	initialize_table(t_table *table, int ac, char **av)
 	table->finished = false;
 	table->can_start = false;
 	mutex(&table->mutex, INIT);
-	mutex(&table->slate, INIT);
+	mutex(&table->status, INIT);
 }
 
 static void	initialize_forks(t_table *table)
@@ -37,16 +37,21 @@ static void	initialize_forks(t_table *table)
 	long	i;
 	t_fork	*fork;
 
+	// i = -1;
+	// while (++i < table->philos_count)
+	// {
+	// 	mutex(&table->fork[i].mutex, INIT);
+	// 	table->fork[i].id = i;
+	// 	table->fork[i].using = false;
+	// 	printf("Fork #%ld created\n", table->fork[i].id);
+	// }
 	i = 0;
-	fork = NULL;
 	while (i < table->philos_count)
 	{
 		fork = table->fork + i;
 		fork->id = i;
-		fork->using = false;
 		mutex(&fork->mutex, INIT);
 		fork->table = table;
-		printf("Fork #%ld created\n", fork->id);
 		i++;
 	}
 }
@@ -84,10 +89,9 @@ static void	initialize_philos(t_table *table)
 		philo->sleeping = false;
 		philo->thinking = false;
 		philo->max_eated = false;
-		philo->next = NULL;
-		put_fork(table, philo, i);
-		philo->table = table;
 		mutex(&philo->mutex, INIT);
+		philo->table = table;
+		put_fork(table, philo, i);
 		printf("Philo #%ld created\n", philo->id);
 		i++;
 	}
