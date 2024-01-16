@@ -6,33 +6,29 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:39:12 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 13:46:21 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 16:57:20 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-static void	can_dinner_start(t_table *table)
-{
-	while (!get_bool(&table->mutex, &table->can_start))
-		;
-}
 
 static void	*dinner_alone(void *data)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	can_dinner_start(philo->table);
+	while (!get_bool(&philo->table->mutex, &philo->table->can_start))
+		;
 	set_long(&philo->mutex, &philo->last_eat, get_time(MILLISECONDS));
-	increase_long(&philo->table->mutex, &philo->table->threads);
+	set_long(&philo->table->mutex, &philo->table->threads,
+		get_long(&philo->table->mutex, &philo->table->threads) + 1);
 	set_status(philo, TAKE_RIGHT_FORK, VISUALIZER);
 	while (!is_finished(philo->table))
 		usleep(200);
 	return (NULL);
 }
 
-static void eat(t_philo *philo)
+static void	eat(t_philo *philo)
 {
 	mutex(&philo->right_fork->mutex, LOCK);
 	set_status(philo, TAKE_RIGHT_FORK, VISUALIZER);
@@ -51,7 +47,7 @@ static void eat(t_philo *philo)
 void	think(t_philo *philo, bool start)
 {
 	long	new_time_to_think;
-	
+
 	if (!start)
 		set_status(philo, THINKING, VISUALIZER);
 	if (philo->table->philos_count % 2 == 0)
@@ -68,9 +64,11 @@ void	*dinner(void *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
-	can_dinner_start(philo->table);
+	while (!get_bool(&philo->table->mutex, &philo->table->can_start))
+		;
 	set_long(&philo->mutex, &philo->last_eat, get_time(MILLISECONDS));
-	increase_long(&philo->table->mutex, &philo->table->threads);
+	set_long(&philo->table->mutex, &philo->table->threads,
+		get_long(&philo->table->mutex, &philo->table->threads) + 1);
 	unsync(philo);
 	while (!is_finished(philo->table))
 	{

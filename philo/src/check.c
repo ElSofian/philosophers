@@ -6,13 +6,13 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:52:05 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 14:08:44 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 16:44:05 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void check_nums(int ac, char **av)
+static void	check_nums(int ac, char **av)
 {
 	int	i;
 
@@ -46,9 +46,9 @@ static void	check_args(int ac, char **av)
 time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n");
 		exit(EXIT_FAILURE);
 	}
-	if (ft_atol(av[1]) > 200)
+	if (ft_atol(av[1]) < 2 || ft_atol(av[1]) > 200)
 	{
-		ft_printf("Too many philosophers.\n");
+		ft_printf("Too many or not enough philosophers.\n");
 		exit(EXIT_FAILURE);
 	}
 }

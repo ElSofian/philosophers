@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:11:29 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 14:00:02 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 16:20:57 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,15 @@ static bool	philo_is_dead(t_philo *philo)
 	time = get_time(MILLISECONDS);
 	time_without_eating = time - last_eat;
 	if (time_without_eating > (philo->table->time_to_die / 1e3))
-	{
-		printf("[%ld] %ld died, last eat: %ld, time_without_eating: %ld\n",
-			time - philo->table->start_time, philo->id,
-			time_without_eating, (philo->table->time_to_die / 1000));
 		return (true);
-	}
 	return (false);
 }
 
 void	*search(void *data)
 {
 	int		i;
-	t_table *table;
-	
+	t_table	*table;
+
 	table = (t_table *)data;
 	while (!can_start_search(table, &table->mutex))
 		;
@@ -62,7 +57,7 @@ void	*search(void *data)
 			{
 				set_bool(&table->mutex, &table->finished, true);
 				set_status(table->philo + i, DEAD, VISUALIZER);
-			} 
+			}
 			i++;
 		}
 	}

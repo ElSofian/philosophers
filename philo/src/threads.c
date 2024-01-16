@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:28:52 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/15 10:45:15 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 16:22:34 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,15 @@ static void	check_error(int status, t_thread_code code)
 	else if (status == EDEADLK)
 		error("A deadlock will occur if the operation is performed.", NULL);
 	else if (status == EPERM)
-		error("The caller doesn't the access permission to the thread.", NULL);
+		error("Caller doesn't have access permission to this thread.", NULL);
 	else if (status == EAGAIN)
 		error("Insufficient ressources to create another thread.", NULL);
 	else if (status == ESRCH)
 		error("Thread not found.", NULL);
 }
 
-void	thread(pthread_t *thread, void *(*f)(void *), void *data, t_thread_code code)
+void	thread(pthread_t *thread, void *(*f)(void *),
+				void *data, t_thread_code code)
 {
 	if (code == CREATE)
 		check_error(pthread_create(thread, NULL, f, data), code);

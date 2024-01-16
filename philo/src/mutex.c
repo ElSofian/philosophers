@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:18:12 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/15 10:45:06 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 16:21:52 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	check_error(int status, t_mutex_code code)
 	else if (status == ENOMEM)
 		error("Insufficient memory to initialize the mutex.", NULL);
 	else if (status == EBUSY)
-		error("The mutex could not be used because it was already locked.", NULL);
+		error("The mutex could not be used, it was already locked.", NULL);
 }
 
 void	mutex(pthread_mutex_t *mutex, t_mutex_code code)
