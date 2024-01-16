@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 14:30:11 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 14:00:44 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 14:09:52 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ static void	initialize_forks(t_table *table)
 	{
 		fork = table->fork + i;
 		fork->id = i;
+		fork->using = false;
 		mutex(&fork->mutex, INIT);
 		fork->table = table;
+		printf("Fork #%ld created\n", fork->id);
 		i++;
 	}
 }
