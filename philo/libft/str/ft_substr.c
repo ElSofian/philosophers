@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 15:24:58 by soelalou          #+#    #+#             */
-/*   Updated: 2023/11/09 16:42:09 by soelalou         ###   ########.fr       */
+/*   Created: 2024/01/09 08:05:19 by soelalou          #+#    #+#             */
+/*   Updated: 2024/01/09 08:05:19 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	str[i] = '\0';
 	return (str);
 }
-
-// Compilation : gcc -Wall -Wextra -Werror ft_substr.c
-// #include <stdio.h>
-// int	main(int ac, char **av)
-// {
-// 	if (ac == 4)
-// 	{
-// 		printf("%s\n", ft_substr(av[1],
-// 			(unsigned int)atoi(av[2]), (size_t)atoi(av[3])));
-// 	}
-// 	else
-// 		printf("Not enough or too many arguments.\n");
-// 	return (0);
-// }

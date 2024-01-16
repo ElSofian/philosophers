@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soelalou <soelalou@42.student.fr>          +#+  +:+       +#+        */
+/*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 14:36:54 by soelalou          #+#    #+#             */
-/*   Updated: 2023/12/27 14:41:39 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 13:19:29 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,16 @@
 
 void	free_all(t_table *table)
 {
-	int	i;
+	int		i;
 
 	i = 0;
-	if (table->philo)
+	while (i < table->philos_count)
 	{
-		i = 0;
-		while (i < table->philos_count)
-		{
-			free(table->philo->fork);
-			free(table->philo);
-			table->philo = table->philo->next;
-		}
-		free(table->philo);
+		mutex(&table->philo[i].mutex, DESTROY);
+		i++;
 	}
-	free(table);
+	mutex(&table->status, DESTROY);
+	mutex(&table->mutex, DESTROY);
+	free(table->fork);
+	free(table->philo);
 }
