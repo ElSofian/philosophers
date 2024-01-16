@@ -6,27 +6,11 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:39:12 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 16:57:20 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 18:00:01 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-static void	*dinner_alone(void *data)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)data;
-	while (!get_bool(&philo->table->mutex, &philo->table->can_start))
-		;
-	set_long(&philo->mutex, &philo->last_eat, get_time(MILLISECONDS));
-	set_long(&philo->table->mutex, &philo->table->threads,
-		get_long(&philo->table->mutex, &philo->table->threads) + 1);
-	set_status(philo, TAKE_RIGHT_FORK, VISUALIZER);
-	while (!is_finished(philo->table))
-		usleep(200);
-	return (NULL);
-}
 
 static void	eat(t_philo *philo)
 {
@@ -56,7 +40,7 @@ void	think(t_philo *philo, bool start)
 		- philo->table->time_to_sleep;
 	if (new_time_to_think < 0)
 		new_time_to_think = 0;
-	wait(philo->table, new_time_to_think * 0.42);
+	wait(philo->table, new_time_to_think * 0.5);
 }
 
 void	*dinner(void *data)
@@ -80,23 +64,4 @@ void	*dinner(void *data)
 		think(philo, false);
 	}
 	return (NULL);
-}
-
-void	start(t_table *table)
-{
-	int	i;
-
-	if (table->philos_count == 1)
-		thread(&table->philo[0].thread, dinner_alone, &table->philo[0], CREATE);
-	i = -1;
-	while (++i < table->philos_count)
-		thread(&table->philo[i].thread, dinner, &table->philo[i], CREATE);
-	thread(&table->searcher, search, table, CREATE);
-	table->start_time = get_time(MILLISECONDS);
-	set_bool(&table->mutex, &table->can_start, true);
-	i = -1;
-	while (++i < table->philos_count)
-		thread(&table->philo[i].thread, NULL, NULL, JOIN);
-	set_bool(&table->mutex, &table->finished, true);
-	thread(&table->searcher, NULL, NULL, JOIN);
 }

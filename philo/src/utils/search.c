@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:11:29 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 16:20:57 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 17:59:39 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static bool	philo_is_dead(t_philo *philo)
 	last_eat = get_long(&philo->mutex, &philo->last_eat);
 	time = get_time(MILLISECONDS);
 	time_without_eating = time - last_eat;
-	if (time_without_eating > (philo->table->time_to_die / 1e3))
+	if (time_without_eating > (philo->table->time_to_die / 1000))
 		return (true);
 	return (false);
 }

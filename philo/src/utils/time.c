@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 12:06:45 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 16:21:13 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/16 17:59:53 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	wait(t_table *table, long sec)
 			break ;
 		passed = get_time(MICROSECONDS) - start;
 		remaining = sec - passed;
-		if (remaining > 1e3)
+		if (remaining > 1000)
 			usleep(remaining / 2);
 		else
 		{
@@ -41,7 +41,7 @@ long	get_time(int code)
 
 	gettimeofday(&tv, NULL);
 	if (code == MILLISECONDS)
-		return (tv.tv_sec * 1e3 + tv.tv_usec / 1e3);
+		return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 	else if (code == MICROSECONDS)
 		return (tv.tv_sec * 1e6 + tv.tv_usec);
 	else if (code == SECONDS)

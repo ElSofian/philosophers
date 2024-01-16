@@ -110,7 +110,6 @@ void	mutex(pthread_mutex_t *mutex, t_mutex_code code);
 void	thread(pthread_t *thread, void *(*f)(void *),
 			void *data, t_thread_code code);
 void	*dinner(void *data);
-void	start(t_table *table);
 
 // Utils
 void	*search(void *data);
@@ -120,7 +119,6 @@ void	set_bool(pthread_mutex_t *mtx, bool *dest, bool value);
 void	wait(t_table *table, long sec);
 void	set_long(pthread_mutex_t *mtx, long *dest, long value);
 void	set_status(t_philo *philo, t_philo_state status, bool visualizer);
-void	increase_long(pthread_mutex_t *mtx, long *value);
 bool	get_bool(pthread_mutex_t *mtx, bool *value);
 bool	is_finished(t_table *table);
 long	get_long(pthread_mutex_t *mtx, long *value);
