@@ -44,12 +44,6 @@ typedef enum e_thread_code {
 	JOIN
 }	t_thread_code;
 
-typedef enum e_time_code {
-	SECONDS,
-	MILLISECONDS,
-	MICROSECONDS
-}	t_time_code;
-
 typedef enum e_philo_state {
 	EATING,
 	TAKE_RIGHT_FORK,
@@ -59,27 +53,15 @@ typedef enum e_philo_state {
 	DEAD
 }	t_philo_state;
 
-typedef struct s_fork
-{
-	long			id;
-	bool			using;
-	pthread_mutex_t	mutex;
-	struct s_table	*table;
-}		t_fork;
-
 typedef struct s_philo
 {
 	long			id;
+	long			left_fork;
+	long			right_fork;
 	long			eated_count;
-	long			last_eat;
-	bool			eating;
-	bool			sleeping;
-	bool			thinking;
 	bool			max_eated;
-	t_fork			*left_fork;
-	t_fork			*right_fork;
+	long long		last_eat;
 	pthread_t		thread;
-	pthread_mutex_t	mutex;
 	struct s_table	*table;
 }		t_philo;
 
@@ -90,38 +72,33 @@ typedef struct s_table
 	long			time_to_eat;
 	long			time_to_sleep;
 	long			eat_count;
-	long			start_time;
-	long			threads;
+	bool			all_max_eated;
 	bool			finished;
 	bool			can_start;
-	t_fork			*fork;
-	t_philo			*philo;
-	pthread_t		searcher;
-	pthread_mutex_t	mutex;
+	long long		start_time;
+	t_philo			philos[200];
+	pthread_mutex_t	eating;
+	pthread_mutex_t	forks[200];
 	pthread_mutex_t	status;
 }			t_table;
 
 // Dinner
-void	error(char *str, t_table *table);
-void	free_all(t_table *table);
-void	check(int ac, char **av);
-void	initialize(t_table *table, int ac, char **av);
-void	mutex(pthread_mutex_t *mutex, t_mutex_code code);
-void	thread(pthread_t *thread, void *(*f)(void *),
-			void *data, t_thread_code code);
-void	*dinner(void *data);
+void		destroy(t_table *table);
+void		error(char *str, t_table *table);
+void		check(int ac, char **av);
+void		initialize(t_table *table, int ac, char **av);
+void		mutex(t_table *table, pthread_mutex_t *mutex,
+				t_mutex_code code);
+void		thread(t_table *table, pthread_t *thread,
+				void *(*f)(void *), void *data, t_thread_code code);
+void		*dinner(void *data);
+void		start(t_table *table);
 
 // Utils
-void	*search(void *data);
-void	think(t_philo *philo, bool start);
-void	unsync(t_philo *philo);
-void	set_bool(pthread_mutex_t *mtx, bool *dest, bool value);
-void	wait(t_table *table, long sec);
-void	set_long(pthread_mutex_t *mtx, long *dest, long value);
-void	set_status(t_philo *philo, t_philo_state status, bool visualizer);
-bool	get_bool(pthread_mutex_t *mtx, bool *value);
-bool	is_finished(t_table *table);
-long	get_long(pthread_mutex_t *mtx, long *value);
-long	get_time(int code);
+void		searcher(t_table *table, t_philo *philo);
+void		set_status(t_philo *philo, t_philo_state status,
+					bool visualizer);
+void		wait(t_table *table, long long time);
+long long	get_time(void);
 
 #endif

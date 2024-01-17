@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 13:52:05 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 16:44:05 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/17 13:30:20 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static void	check_nums(int ac, char **av)
 			ft_printf("Argument %d must be positive number.\n", i);
 			exit(EXIT_FAILURE);
 		}
-		if ((i == 2 || i == 3 || i == 4) && ft_atol(av[i]) < 60)
+		if ((i == 2 || i == 3 || i == 4) && ft_atol(av[i]) < 0)
 		{
-			ft_printf("Argument %d must be greater than 60ms.\n", i);
+			ft_printf("Argument %d must be greater than 0ms.\n", i);
 			exit(EXIT_FAILURE);
 		}
 		i++;
