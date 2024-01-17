@@ -59,8 +59,8 @@ typedef struct s_philo
 	long			left_fork;
 	long			right_fork;
 	long			eated_count;
-	long			last_eat;
 	bool			max_eated;
+	long long		last_eat;
 	pthread_t		thread;
 	struct s_table	*table;
 }		t_philo;
@@ -72,10 +72,10 @@ typedef struct s_table
 	long			time_to_eat;
 	long			time_to_sleep;
 	long			eat_count;
-	long			start_time;
 	bool			all_max_eated;
 	bool			finished;
 	bool			can_start;
+	long long		start_time;
 	t_philo			philos[200];
 	pthread_mutex_t	eating;
 	pthread_mutex_t	forks[200];
@@ -83,22 +83,22 @@ typedef struct s_table
 }			t_table;
 
 // Dinner
-void	destroy(t_table *table);
-void	error(char *str, t_table *table);
-void	check(int ac, char **av);
-void	initialize(t_table *table, int ac, char **av);
-void	mutex(t_table *table, pthread_mutex_t *mutex,
+void		destroy(t_table *table);
+void		error(char *str, t_table *table);
+void		check(int ac, char **av);
+void		initialize(t_table *table, int ac, char **av);
+void		mutex(t_table *table, pthread_mutex_t *mutex,
 				t_mutex_code code);
-void	thread(t_table *table, pthread_t *thread,
+void		thread(t_table *table, pthread_t *thread,
 				void *(*f)(void *), void *data, t_thread_code code);
-void	*dinner(void *data);
-void	start(t_table *table);
+void		*dinner(void *data);
+void		start(t_table *table);
 
 // Utils
-void	searcher(t_table *table, t_philo *philo);
-void	set_status(t_philo *philo, t_philo_state status,
+void		searcher(t_table *table, t_philo *philo);
+void		set_status(t_philo *philo, t_philo_state status,
 					bool visualizer);
-void	wait(t_table *table, long time);
-long	get_time(void);
+void		wait(t_table *table, long long time);
+long long	get_time(void);
 
 #endif

@@ -6,15 +6,15 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 12:06:45 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/17 14:18:10 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/17 16:27:44 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	wait(t_table *table, long time)
+void	wait(t_table *table, long long time)
 {
-	long	passed;
+	long long	passed;
 
 	passed = get_time();
 	while (!table->finished)
@@ -25,7 +25,7 @@ void	wait(t_table *table, long time)
 	}
 }
 
-long	get_time(void)
+long long	get_time(void)
 {
 	struct timeval	tv;
 
