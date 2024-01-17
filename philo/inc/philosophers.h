@@ -77,6 +77,7 @@ typedef struct s_table
 	bool			can_start;
 	long long		start_time;
 	t_philo			philos[200];
+	t_thread_code	thread_code;
 	pthread_mutex_t	eating;
 	pthread_mutex_t	forks[200];
 	pthread_mutex_t	status;
@@ -90,14 +91,13 @@ void		initialize(t_table *table, int ac, char **av);
 void		mutex(t_table *table, pthread_mutex_t *mutex,
 				t_mutex_code code);
 void		thread(t_table *table, pthread_t *thread,
-				void *(*f)(void *), void *data, t_thread_code code);
+				void *(*f)(void *), void *data);
 void		*dinner(void *data);
 void		start(t_table *table);
 
 // Utils
 void		searcher(t_table *table, t_philo *philo);
-void		set_status(t_philo *philo, t_philo_state status,
-					bool visualizer);
+void		set_status(t_philo *philo, t_philo_state status, bool visualizer);
 void		wait(t_table *table, long long time);
 long long	get_time(void);
 

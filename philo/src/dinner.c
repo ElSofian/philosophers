@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:39:12 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/17 14:23:13 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:05:24 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	eat(t_philo *philo)
 {
 	t_table	*table;
-	
+
 	table = philo->table;
 	mutex(table, &table->forks[philo->left_fork], LOCK);
 	set_status(philo, TAKE_LEFT_FORK, VISUALIZER);
@@ -31,7 +31,7 @@ static void	eat(t_philo *philo)
 	mutex(table, &table->forks[philo->right_fork], UNLOCK);
 }
 
-static void sleeping(t_philo *philo)
+static void	sleeping(t_philo *philo)
 {
 	set_status(philo, SLEEPING, VISUALIZER);
 	wait(philo->table, philo->table->time_to_sleep);
@@ -72,7 +72,8 @@ void	start(t_table *table)
 	table->start_time = get_time();
 	while (i < table->philos_count)
 	{
-		thread(table, &philo[i].thread, dinner, &philo[i], CREATE);
+		table->thread_code = CREATE;
+		thread(table, &philo[i].thread, dinner, &philo[i]);
 		philo[i].last_eat = get_time();
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 10:28:52 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/17 14:14:40 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:04:44 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,15 @@ static void	check_error(t_table *table, int status, t_thread_code code)
 }
 
 void	thread(t_table *table, pthread_t *thread,
-				void *(*f)(void *), void *data, t_thread_code code)
+				void *(*f)(void *), void *data)
 {
-	if (code == CREATE)
-		check_error(table, pthread_create(thread, NULL, f, data), code);
-	else if (code == JOIN)
-		check_error(table, pthread_join(*thread, NULL), code);
-	else if (code == DETACH)
-		check_error(table, pthread_detach(*thread), code);
+	if (table->thread_code == CREATE)
+		check_error(table, pthread_create(thread, NULL, f, data),
+			table->thread_code);
+	else if (table->thread_code == JOIN)
+		check_error(table, pthread_join(*thread, NULL), table->thread_code);
+	else if (table->thread_code == DETACH)
+		check_error(table, pthread_detach(*thread), table->thread_code);
 	else
 		error("Invalid thread code given.", table);
 }
