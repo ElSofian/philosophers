@@ -6,61 +6,29 @@
 /*   By: soelalou <soelalou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 12:06:45 by soelalou          #+#    #+#             */
-/*   Updated: 2024/01/16 17:59:53 by soelalou         ###   ########.fr       */
+/*   Updated: 2024/01/17 14:18:10 by soelalou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	wait(t_table *table, long sec)
+void	wait(t_table *table, long time)
 {
-	long	start;
 	long	passed;
-	long	remaining;
 
-	start = get_time(MICROSECONDS);
-	while (get_time(MICROSECONDS) - start < sec)
+	passed = get_time();
+	while (!table->finished)
 	{
-		if (is_finished(table))
+		if ((get_time() - passed) >= time)
 			break ;
-		passed = get_time(MICROSECONDS) - start;
-		remaining = sec - passed;
-		if (remaining > 1000)
-			usleep(remaining / 2);
-		else
-		{
-			while (get_time(MICROSECONDS) - start < sec)
-				;
-		}
+		usleep(50);
 	}
 }
 
-long	get_time(int code)
+long	get_time(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	if (code == MILLISECONDS)
-		return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-	else if (code == MICROSECONDS)
-		return (tv.tv_sec * 1e6 + tv.tv_usec);
-	else if (code == SECONDS)
-		return (tv.tv_sec + tv.tv_usec / 1e6);
-	else
-		error("Wrong input code.", NULL);
-	return (0);
-}
-
-void	unsync(t_philo *philo)
-{
-	if (philo->table->philos_count % 2 == 0)
-	{
-		if (philo->id % 2 == 0)
-			wait(philo->table, 300000);
-	}
-	else
-	{
-		if (philo->id % 2)
-			think(philo, true);
-	}
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
