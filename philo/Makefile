@@ -16,7 +16,7 @@
 NAME		= philo
 LIBFT		= libft/libft.a
 CC			= cc
-CFLAGS		= -Wall -Wextra -Iinc -g3
+CFLAGS		= -Wall -Wextra -Werror -Iinc -g3
 RM			= rm -rf
 
 SRCS_DIR	= src
